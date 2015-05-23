@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by Tom Veniat on 21/05/15.
  */
-public class TwitterImpl extends UnicastRemoteObject implements Twitter, MessageListener {
+public class TwitterImpl extends UnicastRemoteObject implements Twitter {
 
     private List<Hashtag> hashtags;
     private List<User> users;
@@ -44,8 +44,21 @@ public class TwitterImpl extends UnicastRemoteObject implements Twitter, Message
     @Override
     public boolean newAccount(String username, String password) throws RemoteException {
         if (existsUser(username)) return false;
-
         users.add(new User(username, password, session));
+        try {
+
+            MessageProducer producer =session.createProducer((Topic) context.lookup("dynamicTopics/topics"));
+            MapMessage mapMessage = session.createMapMessage();
+            mapMessage.setString("Type","MAJ");
+            mapMessage.setString("TargetType","user");
+            mapMessage.setString("TargetName",username);
+            producer.send(mapMessage);
+
+        } catch (JMSException e) {
+            e.printStackTrace();
+        } catch (NamingException e) {
+            e.printStackTrace();
+        }
         return true;
     }
 
@@ -82,14 +95,29 @@ public class TwitterImpl extends UnicastRemoteObject implements Twitter, Message
 
     @Override
     public boolean followHashtag(String username, String hashtag) throws RemoteException {
+        System.out.println("###Add of #"+hashtag+" to "+username);
         Hashtag hash = findHashtag(hashtag);
         if (hash == null) return false;
         User user = findUser(username);
         if (user==null) return false;
 
-        System.out.println(user);
-        user.getHashtags().add(hash);
-        System.out.println(user);
+
+        user.followHastag(hash);
+        System.out.println("#Add END : " + user);
+        return true;
+    }
+
+    @Override
+    public boolean followUser(String username, String followedUser) throws RemoteException {
+        System.out.println("###Add of @"+followedUser+" to "+username);
+        User user = findUser(username), wantedUser = findUser(followedUser);
+        if (user == null || wantedUser == null){
+            System.out.println("One of these guys is null.");
+            return false;
+        }
+
+        user.followUser(wantedUser);
+        System.out.println("#Add END : " + user);
         return true;
     }
 
@@ -102,6 +130,14 @@ public class TwitterImpl extends UnicastRemoteObject implements Twitter, Message
     public List<Hashtag> allHashtags() throws RemoteException {
         return hashtags;
     }
+
+    @Override
+    public boolean existsTarget(String targetName) throws RemoteException {
+        return existsUser(targetName) || existsHashtag(targetName);
+    }
+
+
+
 
 //    @Override
 //    public boolean postMessage(User user, String message, String hashtag) throws RemoteException {
@@ -124,9 +160,7 @@ public class TwitterImpl extends UnicastRemoteObject implements Twitter, Message
 //        return true;
 //    }
 
-    private boolean existsUser(String username){
-        return findUser(username)!=null;
-    }
+
 
     private User findUser(String username){
         for (User u : users)
@@ -135,12 +169,21 @@ public class TwitterImpl extends UnicastRemoteObject implements Twitter, Message
         return null;
     }
 
+    @Override
+    public boolean existsUser(String username){
+        return findUser(username)!=null;
+    }
+
     private Hashtag findHashtag(String hashtag){
         for (Hashtag h : hashtags)
             if (h.getName().equals(hashtag))
                 return h;
         return null;
+    }
 
+    @Override
+    public boolean existsHashtag(String hashtagName) {
+        return findHashtag(hashtagName)!=null;
     }
 
     private User loggedUser(String username, String password) {
@@ -155,13 +198,4 @@ public class TwitterImpl extends UnicastRemoteObject implements Twitter, Message
         return "Je suis un twitter de "+users.size()+" users et "+hashtags.size()+" hastags.";
     }
 
-    @Override
-    public void onMessage(Message message) {
-        MapMessage mm = (MapMessage)message;
-        try {
-            System.out.println("New tweet :\n\t"+mm.getString("Author")+" -> "+ mm.getString("Content"));
-        } catch (JMSException e) {
-            e.printStackTrace();
-        }
-    }
 }

@@ -6,7 +6,8 @@ import java.util.List;
 /**
  * Created by Tom Veniat on 21/05/15.
  */
-public class User implements Serializable ,MessageListener {
+public class User implements Serializable {
+
 
     private String username;
     private String password;
@@ -18,9 +19,10 @@ public class User implements Serializable ,MessageListener {
         this.password = password;
         this.followedHashtags=new ArrayList<>();
         this.followedUsers=new ArrayList<>();
+        this.followedUsers.add(this);
     }
 
-    public boolean isFollowingHashtag(String hashtag){
+    private boolean isFollowingHashtag(String hashtag){
         return getHashtag(hashtag)!=null;
     }
 
@@ -29,12 +31,38 @@ public class User implements Serializable ,MessageListener {
             if (h.getName().equals(hashtag))
                 return h;
         return null;
+    }
+
+    public void followHastag(Hashtag hashtag){
+        if (!isFollowingHashtag(hashtag.getName())){
+            this.followedHashtags.add(hashtag);
+            System.out.println("hashtag added");
+        }else System.out.println("hashtag not added");
+    }
+
+    private boolean isFollowingUser(String user){
+        System.out.println("\tisFollowingUser call answer : "+getUser(user)!=null);
+        return getUser(user)!=null;
+    }
+
+    private User getUser(String user){
+        System.out.println("SEARCHING : "+user);
+        for (User u : followedUsers)
+            if (u.getUsername().equals(user)){
+                System.out.println("\tgetUser call answer : "+u);
+                return u;
+            }
+        System.out.println("\ton a pas trouvé "+user );
+        return null;
 
     }
 
-    private void followHastag(Hashtag hashtag){
-        if (!isFollowingHashtag(hashtag.getName()))
-            this.followedHashtags.add(hashtag);
+    public void followUser(User user){
+        System.out.println("follow user :");
+        if (!isFollowingUser(user.getUsername())){
+            this.followedUsers.add(user);
+            System.out.println("user added");
+        }else System.out.println("user already added");
     }
 
     public String getUsername() {
@@ -45,27 +73,21 @@ public class User implements Serializable ,MessageListener {
         return password;
     }
 
-    public List<Hashtag> getHashtags() {
+    public List<Hashtag> getFollowedHashtags() {
         return followedHashtags;
     }
 
-
-
-    @Override
-    public void onMessage(Message message) {
-        MapMessage mm = (MapMessage)message;
-        try {
-            System.out.println("New tweet :\n\t"+mm.getString("Author")+" -> "+ mm.getString("Content"));
-        } catch (JMSException e) {
-            e.printStackTrace();
-        }
+    public List<User> getFollowedUsers() {
+        return followedUsers;
     }
 
     @Override
     public String toString() {
-        String twittos = "Twittos : "+username+"\nFollowing hashtags :+\n";
+        String twittos = "Twittoseur : "+username+" who follows :\n";
+        for (User u : followedUsers)
+            twittos+="\t@"+u.getUsername()+"\n";
         for (Hashtag h : followedHashtags)
-            twittos+="\t-"+h.getName()+"\n";
+            twittos+="\t#"+h.getName()+"\n";
         return twittos;
     }
 
