@@ -1,4 +1,4 @@
-package model;
+package datas;
 
 import javax.jms.Session;
 import java.io.Serializable;
@@ -35,11 +35,15 @@ public class User implements Serializable {
         return null;
     }
 
-    public void followHastag(Hashtag hashtag){
+    public boolean followHastag(Hashtag hashtag){
         if (!isFollowingHashtag(hashtag.getName())){
             this.followedHashtags.add(hashtag);
             System.out.println("hashtag added");
-        }else System.out.println("hashtag not added");
+            return true;
+        }else{
+            System.out.println("hashtag not added");
+            return false;
+        }
     }
 
     private boolean isFollowingUser(String user){
@@ -59,12 +63,17 @@ public class User implements Serializable {
 
     }
 
-    public void followUser(User user){
+    public boolean followUser(User user){
         System.out.println("follow user :");
         if (!isFollowingUser(user.getUsername())){
             this.followedUsers.add(user);
             System.out.println("user added");
-        }else System.out.println("user already added");
+            return true;
+        }else{
+            System.out.println("user already added");
+            return false;
+        }
+
     }
 
     public String getUsername() {

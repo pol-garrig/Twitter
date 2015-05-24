@@ -1,35 +1,18 @@
 
 package view;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GradientPaint;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.border.EtchedBorder;
-import javax.swing.border.TitledBorder;
-
+import control.MainController;
 import model.Client;
 
-import control.MainController;
-
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 
 @SuppressWarnings("serial")
 public class ConnectionFrame extends JFrame {
@@ -55,15 +38,15 @@ public class ConnectionFrame extends JFrame {
 
 		JLabel pho = new JLabel();
 
-		//try {
-			//new ImageIcon(this.getClass().getResource("/images/NotSet_16x16.png"))
-			//ImageIcon p = new ImageIcon(ImageIO.read(new File("./Client/src/pl.jpg")));
-			ImageIcon p = new ImageIcon(this.getClass().getResource("./Client/src/pl.jpg"));
+		try {
+//			new ImageIcon(this.getClass().getResource("/images/NotSet_16x16.png"))
+			ImageIcon p = new ImageIcon(ImageIO.read(new File("./pl.jpg")));
+//			ImageIcon p = new ImageIcon(this.getClass().getResource("./Client/src/pl.jpg"));
 			pho.setIcon(p);
 			poster.add(pho);
-		/*} catch (IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
-		}*/
+		}
 
 		// Password
 		JPanel passwordPanel = new JPanel();

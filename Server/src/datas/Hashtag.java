@@ -1,4 +1,4 @@
-package model;
+package datas;
 
 import java.io.Serializable;
 
@@ -21,6 +21,11 @@ public class Hashtag implements Serializable{
 //    }
 
     public String getName() {
+        return name;
+    }
+
+    @Override
+    public String toString() {
         return name;
     }
 }

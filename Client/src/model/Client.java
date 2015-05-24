@@ -1,13 +1,14 @@
 package model;
 
+import datas.User;
 import rmi.Twitter;
+
 import javax.jms.Session;
 import javax.naming.InitialContext;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.ArrayList;
 import java.util.Observable;
 
 /**
@@ -34,7 +35,7 @@ public class Client extends Observable {
 			e.printStackTrace();
 		}
 
-		// this.simulate3();
+//		this.simulate3();
 	}
 
 	public void simulate1() {
@@ -126,15 +127,16 @@ public class Client extends Observable {
 
 	// TODO
 	public void followHashtag(String text) throws RemoteException {
-		ArrayList<String> temp = new ArrayList<>();
-		for (int i = 0; i < user.getMessages().size(); i++) {
-			if (user.getMessages().get(i).contains(text)) {
-				temp.add(user.getMessages().get(i));
-			}
-		}
-
-		setChanged();
-		notifyObservers(temp);
+		user.followHashtag(text);
+//		ArrayList<String> temp = new ArrayList<>();
+//		for (int i = 0; i < user.getMessages().size(); i++) {
+//			if (user.getMessages().get(i).contains(text)) {
+//				temp.add(user.getMessages().get(i));
+//			}
+//		}
+//
+//		setChanged();
+//		notifyObservers(temp);
 	}
 
 	// TODO

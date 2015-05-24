@@ -1,28 +1,13 @@
 package view;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GradientPaint;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import control.MainController;
 
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.ScrollPaneConstants;
+import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
-
-import control.MainController;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 @SuppressWarnings("serial")
 public class HashtagView extends JFrame {
@@ -41,7 +26,7 @@ public class HashtagView extends JFrame {
 				"Hashtag"));
 		JTextArea followings = new JTextArea();
 		// TODO
-		followings.setText(getHashtag());
+		followings.setText(mc.getUser().getUserClient().getFollowedHashtags().toString());
 		Font f = new Font("Hashtag", Font.BOLD, 14);
 		followings.setFont(f);
 		followings.setLineWrap(true);
@@ -69,16 +54,16 @@ public class HashtagView extends JFrame {
 		this.setVisible(true);
 	}
 
-	public String getHashtag() {
-		String temp = "";
-		for (int i = 0; i < mc.getUser().getUserClient().getMessages().size(); i++) {
-			System.out.println("lalaal");
-			if (mc.getUser().getUserClient().getMessages().get(i).contains("#")) {
-				temp += mc.getUser().getUserClient().getMessages().get(i) + "\n";
-			}
-		}
-		return temp;
-	}
+//	public String getHashtag() {
+//		String temp = "";
+//		for (int i = 0; i < mc.getUser().getUserClient().getFollowedHashtags().size(); i++) {
+//			System.out.println("lalaal");
+//			if (mc.getUser().getUserClient().getMessages().get(i).contains("#")) {
+//				temp += mc.getUser().getUserClient().getMessages().get(i) + "\n";
+//			}
+//		}
+//		return temp;
+//	}
 
 	private class AddNew extends JButton implements ActionListener {
 		private AddNew() {

@@ -1,5 +1,7 @@
 package model;
 
+import datas.Hashtag;
+import datas.User;
 import rmi.Twitter;
 
 import javax.jms.*;
@@ -78,34 +80,52 @@ public class UserClient extends Observable implements MessageListener {
 	}
 
 	private boolean listenTopic(String name) {
+		System.out.println("On suit un nouveau tag");
+
 		MessageConsumer consumer;
 		try {
 			consumer = session.createConsumer((Topic) context
 					.lookup("dynamicTopics/" + name));
 			consumer.setMessageListener(this);
+			user=twitter.connect(user.getUsername(),user.getPassword());
 		} catch (NamingException e) {
 			e.printStackTrace();
 			return false;
 		} catch (JMSException e) {
 			e.printStackTrace();
 			return false;
+		} catch (RemoteException e) {
+			e.printStackTrace();
 		}
 		System.out.println("Now listening.");
 		return true;
 	}
 
 	public void postMessage(String message, boolean createHashtags) {
-		String userDestinations[] = message.split("@");
-		String hashtagDestinations[] = message.split("#");
+		String userDestinations[]={};
+		String hashtagDestinations[]={};
+		if (message.contains("@"))
+			userDestinations = message.split("@");
+		if (message.contains("#"))
+			hashtagDestinations = message.split("#");
+
 		// probleme d'ajoute
-		System.out.println("mssd = " + message);
-		/*if (!user.getUsername().equals("")) {
+
+		if (!user.getUsername().equals("")) {
 			messages.add(user.getUsername() + " : " + message);
-		}*/
+		}
 		for (int i = 0; i < userDestinations.length; i++)
 			userDestinations[i] = userDestinations[i].split(" ")[0];
 		for (int i = 0; i < hashtagDestinations.length; i++)
 			hashtagDestinations[i] = hashtagDestinations[i].split(" ")[0];
+
+		System.out.println("OKAY");
+		for (String s : userDestinations)
+			System.out.println(s);
+		for (String s : hashtagDestinations)
+			System.out.println(s);
+
+		System.out.println("OKAY");
 
 		List<String> trueDestinations = new ArrayList<>();
 
@@ -139,6 +159,7 @@ public class UserClient extends Observable implements MessageListener {
 
 	public boolean postMessage(String message, String destinationName) {
 		try {
+			System.out.println("ON VEUT POSTER DANS : "+destinationName);
 			MapMessage newMessage = session.createMapMessage();
 			newMessage.setString("Type", "tweet");
 			newMessage.setString("Author", user.getUsername());
@@ -244,7 +265,21 @@ public class UserClient extends Observable implements MessageListener {
 		return hashtags;
 	}
 
-	public List<String> getUser() {
-		return users;
+	public List<String> getFollowedUsers() {
+		List<String> answer =  new ArrayList<>();
+		for (User u : user.getFollowedUsers())
+			answer.add(u.getUsername());
+		return answer;
+	}
+
+	public List<String> getFollowedHashtags() {
+		List<String> answer =  new ArrayList<>();
+		for (Hashtag h : user.getFollowedHashtags())
+			answer.add(h.getName());
+		return answer;
+	}
+
+	public User getUser() {
+		return user;
 	}
 }

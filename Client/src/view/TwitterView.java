@@ -1,14 +1,14 @@
 package view;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GradientPaint;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
+import control.MainController;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -16,24 +16,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
-
-import javax.imageio.ImageIO;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.EtchedBorder;
-import javax.swing.border.TitledBorder;
-
-import control.MainController;
 
 public class TwitterView extends JFrame implements Observer {
 
@@ -74,7 +56,7 @@ public class TwitterView extends JFrame implements Observer {
 		JLabel pho = new JLabel();
 
 		try {
-			ImageIcon p = new ImageIcon(ImageIO.read(new File("Client/src/pl.jpg")));
+			ImageIcon p = new ImageIcon(ImageIO.read(new File("./pl.jpg")));
 			pho.setIcon(p);
 			poster.add(pho);
 		} catch (IOException e) {
@@ -124,7 +106,7 @@ public class TwitterView extends JFrame implements Observer {
 		// Button Hashtag
 		Hashtag h = new Hashtag();
 
-		flox2.add(followers);
+		//flox2.add(followers);
 		flox2.add(following);
 		flox2.add(h);
 		flox.add(userPanel);
@@ -274,6 +256,7 @@ public class TwitterView extends JFrame implements Observer {
 		public void actionPerformed(ActionEvent e) {
 			mc.TwitterToFollowersView();
 			System.out.println("Followers");
+
 		}
 	}
 
@@ -385,7 +368,7 @@ public class TwitterView extends JFrame implements Observer {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			mc.followHashtag(hashtag.getText());
-			System.out.println("follo hashtag");
+			hashtag.setText("");
 		}
 	}
 	
@@ -428,7 +411,6 @@ public class TwitterView extends JFrame implements Observer {
 	}
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		System.out.println("holaaa");
 		user1.setText("");
 		@SuppressWarnings("unchecked")
 		ArrayList<String> temp = (ArrayList<String>) arg1;

@@ -1,19 +1,10 @@
 package control;
 
-import java.rmi.RemoteException;
-
 import model.Client;
 import model.UserClient;
+import view.*;
 
-import view.AddFollowing;
-import view.ConnectionFrame;
-import view.ErrorRemote;
-import view.ErrorView;
-import view.FollowersView;
-import view.FollowingView;
-import view.HashtagView;
-import view.NewAccount;
-import view.TwitterView;
+import java.rmi.RemoteException;
 
 public class MainController {
 
@@ -48,7 +39,9 @@ public class MainController {
 	}
 
 	public void ConnectionToTwitter(String user, String password) {
+		System.out.println("Call with : " +user+", "+password);
 		try {
+			System.out.println(c);
 			c.connect(user, password);
 			TwitterView tx = new TwitterView(this, user);
 			c.addObserver(tx);

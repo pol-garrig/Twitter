@@ -1,7 +1,7 @@
 package rmi;
 
-import model.Hashtag;
-import model.User;
+import datas.Hashtag;
+import datas.User;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

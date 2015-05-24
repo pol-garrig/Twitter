@@ -1,7 +1,7 @@
 package rmi;
 
-import model.Hashtag;
-import model.User;
+import datas.Hashtag;
+import datas.User;
 
 import javax.jms.*;
 import javax.naming.Context;
@@ -102,14 +102,14 @@ public class TwitterImpl extends UnicastRemoteObject implements Twitter {
     public boolean followHashtag(String username, String hashtag) throws RemoteException {
         System.out.println("###Add of #"+hashtag+" to "+username);
         Hashtag hash = findHashtag(hashtag);
-        if (hash == null) return false;
+        if (hash == null){
+            createHashtag(hashtag);
+            hash = findHashtag(hashtag);
+        }
         User user = findUser(username);
         if (user==null) return false;
 
-
-        user.followHastag(hash);
-        System.out.println("#Add END : " + user);
-        return true;
+        return  user.followHastag(hash);
     }
 
     @Override
@@ -121,9 +121,7 @@ public class TwitterImpl extends UnicastRemoteObject implements Twitter {
             return false;
         }
 
-        user.followUser(wantedUser);
-        System.out.println("#Add END : " + user);
-        return true;
+        return user.followUser(wantedUser);
     }
 
     @Override
