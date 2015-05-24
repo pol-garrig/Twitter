@@ -26,6 +26,8 @@ public class Client {
         try {
             Registry r = LocateRegistry.getRegistry(host, port);
             this.twitter= (Twitter) r.lookup("twitter");
+            twitter.connect("Fer", "123");
+            twitter.connect("Tom", "123");
         } catch (RemoteException e) {
             e.printStackTrace();
         } catch (NotBoundException e) {
@@ -33,7 +35,7 @@ public class Client {
         }
 
 
-        this.simulate3();
+        //this.simulate3();
     }
 
 
@@ -107,9 +109,9 @@ public class Client {
     }
 
 
-    public static void main(String[] args) {
-        Client c = new Client("localhost",1099);
-
-    }
+	public void connect(String user, String pssd) throws RemoteException {
+        User u = twitter.connect(user, pssd);
+		this.user = new UserClient(twitter, u);
+	}
 
 }

@@ -32,10 +32,6 @@ public class Server {
         } catch (AlreadyBoundException e) {
             e.printStackTrace();
         }
-
-
         System.out.println("server Started.");
-
-
     }
 }
