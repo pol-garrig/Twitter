@@ -105,7 +105,7 @@ public class ConnectionFrame extends JFrame {
 		this.add(east, BorderLayout.EAST);
 
 		this.setTitle("MyTwitter");
-		this.setSize(640, 240);
+		this.setSize(640, 260);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 

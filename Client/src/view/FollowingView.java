@@ -43,6 +43,8 @@ public class FollowingView extends JFrame {
 				"Followings"));
 		JTextArea followings = new JTextArea();
 		Font f = new Font("Password", Font.BOLD, 14);
+		followings.setText(mc.getUser().getUserClient().getUser().toString());
+
 		followings.setFont(f);
 		followings.setLineWrap(true);
 		followings.setEditable(false); // set textArea non-editable

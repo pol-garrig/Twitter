@@ -1,4 +1,3 @@
-
 package view;
 
 import java.awt.BorderLayout;
@@ -13,6 +12,7 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -24,58 +24,64 @@ import javax.swing.border.TitledBorder;
 
 import control.MainController;
 
-
 @SuppressWarnings("serial")
-public class FollowersView extends JFrame {
-
-	@SuppressWarnings("unused")
+public class HashtagView extends JFrame {
 	private MainController mc;
 
-	public FollowersView(MainController mc) {
+	public HashtagView(MainController mc) {
 		super();
 		this.mc = mc;
 
 		this.setLayout(new BorderLayout());
 
-		// Liste de followers
-		JPanel followersPanel = new JPanel();
-		followersPanel.setBackground(Color.white);
-		followersPanel.setBorder(new TitledBorder(new EtchedBorder(),
-				"Followers"));
-		JTextArea listTeewt = new JTextArea();
-		Font f = new Font("Password", Font.BOLD, 14);
-		listTeewt.setFont(f);
-		listTeewt.setLineWrap(true);
-		listTeewt.setEditable(false); // set textArea non-editable
-		//Exemple
-		listTeewt.setText(mc.getUser().getUserClient().getUser().toString());
-
-		JScrollPane scroll3 = new JScrollPane(listTeewt);
+		// Liste de followings
+		JPanel followingsPanel = new JPanel();
+		followingsPanel.setBackground(Color.white);
+		followingsPanel.setBorder(new TitledBorder(new EtchedBorder(),
+				"Hashtag"));
+		JTextArea followings = new JTextArea();
+		// TODO
+		followings.setText(getHashtag());
+		Font f = new Font("Hashtag", Font.BOLD, 14);
+		followings.setFont(f);
+		followings.setLineWrap(true);
+		followings.setEditable(false); // set textArea non-editable
+		JScrollPane scroll3 = new JScrollPane(followings);
 		// scroll.
 		scroll3.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		Dimension d4 = new Dimension(260, 350);
 		scroll3.setPreferredSize(d4);
-		followersPanel.add(scroll3);
+		followingsPanel.add(scroll3);
 
-		
-		//AddNewFollower add = new AddNewFollower();
-		//JPanel p1 = new JPanel();
-		
-		this.add(followersPanel,BorderLayout.CENTER);
-		//this.add(add,BorderLayout.EAST);
-		
+		AddNew add = new AddNew();
+		JPanel flox2 = new JPanel();
+		flox2.setBackground(Color.white);
+		flox2.setLayout(new BoxLayout(flox2, BoxLayout.PAGE_AXIS));
+
+		flox2.add(add);
+		this.add(followingsPanel, BorderLayout.CENTER);
+		this.add(flox2, BorderLayout.EAST);
+
 		this.setTitle("MyTwitter");
-		this.setSize(320 ,380);
+		this.setSize(430, 400);
 		this.setLocationRelativeTo(null);
-		//this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+		// this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
-
 	}
 
-	@SuppressWarnings("unused")
-	private class AddNewFollower extends JButton implements ActionListener {
-		private AddNewFollower() {
+	public String getHashtag() {
+		String temp = "";
+		for (int i = 0; i < mc.getUser().getUserClient().getMessages().size(); i++) {
+			System.out.println("lalaal");
+			if (mc.getUser().getUserClient().getMessages().get(i).contains("#")) {
+				temp += mc.getUser().getUserClient().getMessages().get(i) + "\n";
+			}
+		}
+		return temp;
+	}
+
+	private class AddNew extends JButton implements ActionListener {
+		private AddNew() {
 			super();
 			setContentAreaFilled(false);
 			setFocusPainted(false);
@@ -85,7 +91,7 @@ public class FollowersView extends JFrame {
 			Font f = new Font("VERDANA", Font.BOLD, 17);
 			this.setPreferredSize(d);
 			this.setMaximumSize(d);
-			this.setText("New Follower");
+			this.setText("New ");
 			this.setForeground(Color.BLACK);
 			Font f2 = new Font("VERDANA", Font.BOLD, 22);
 			this.setFont(f2);
@@ -108,6 +114,7 @@ public class FollowersView extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			mc.FollowingToAdd();
 			System.out.println("new Followers");
 		}
 	}

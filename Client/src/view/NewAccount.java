@@ -27,7 +27,6 @@ import javax.swing.border.TitledBorder;
 
 import control.MainController;
 
-
 @SuppressWarnings("serial")
 public class NewAccount extends JFrame {
 
@@ -181,7 +180,7 @@ public class NewAccount extends JFrame {
 					&& !pssd.getText().equals("") && !user.getText().equals("")) {
 				mc.createNewUser(lastName.getText(), firstName.getText(),
 						pssd.getText(), user.getText());
-				mc.NewAccountToConnection();
+				mc.NewAccountToConnection(user.getText(), pssd.getText());
 				dispose();
 			} else {
 				mc.ErrorView();

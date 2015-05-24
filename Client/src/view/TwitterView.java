@@ -13,6 +13,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
@@ -32,16 +35,21 @@ import javax.swing.border.TitledBorder;
 
 import control.MainController;
 
-
-public class TwitterView extends JFrame {
+public class TwitterView extends JFrame implements Observer {
 
 	private static final long serialVersionUID = 1L;
 	private MainController mc;
+	private JTextField user1;
 	@SuppressWarnings("unused")
+	private JTextArea listTeewt;
 	private String user;
+	private JPanel userPanel;
+	private JTextField hashtag;
+	private JTextField userSearche;
 
-	public TwitterView(MainController mc,String user) {
-		
+	
+	public TwitterView(MainController mc, String user) {
+
 		super();
 		this.user = user;
 		this.mc = mc;
@@ -53,11 +61,10 @@ public class TwitterView extends JFrame {
 		flox.setLayout(new BoxLayout(flox, BoxLayout.PAGE_AXIS));
 		JPanel flox2 = new JPanel();
 		flox2.setLayout(new BoxLayout(flox2, BoxLayout.PAGE_AXIS));
-		Border b = new EmptyBorder(40, 5, 10 ,5);
+		Border b = new EmptyBorder(40, 5, 10, 5);
 		flox2.setBorder(b);
 		flox2.setBackground(Color.white);
 
-		
 		east.setLayout(new BorderLayout());
 
 		flox.setBackground(Color.white);
@@ -75,13 +82,12 @@ public class TwitterView extends JFrame {
 		}
 		Font f = new Font("Password", Font.BOLD, 14);
 
-		
 		// Liste de tweet
 		JPanel lsitetweetPanel = new JPanel();
 		lsitetweetPanel.setBackground(Color.white);
 		lsitetweetPanel
 				.setBorder(new TitledBorder(new EtchedBorder(), "Tweets"));
-		JTextArea listTeewt = new JTextArea();
+		listTeewt = new JTextArea();
 		listTeewt.setFont(f);
 		listTeewt.setLineWrap(true);
 		listTeewt.setEditable(false); // set textArea non-editable
@@ -93,10 +99,11 @@ public class TwitterView extends JFrame {
 		lsitetweetPanel.add(scroll3);
 
 		// What's happening
-		JPanel userPanel = new JPanel();
+		userPanel = new JPanel();
 		userPanel.setBackground(Color.white);
-		userPanel.setBorder(new TitledBorder(new EtchedBorder(), "What's happening "+user+" ?"));
-		JTextField user1 = new JTextField();
+		userPanel.setBorder(new TitledBorder(new EtchedBorder(),
+				"What's happening " + user + " ?"));
+		user1 = new JTextField();
 		user1.setPreferredSize(new Dimension(200, 20));
 		user1.setFont(f);
 		user1.setBorder(null);
@@ -107,36 +114,75 @@ public class TwitterView extends JFrame {
 
 		// Login Botton
 		Tweet tweet = new Tweet();
-		
-		
+
 		// Button followers
 		Followers followers = new Followers();
-		
-		//Button following
-		Following following =  new Following();
-		
-		
+
+		// Button following
+		Following following = new Following();
+
+		// Button Hashtag
+		Hashtag h = new Hashtag();
+
 		flox2.add(followers);
 		flox2.add(following);
+		flox2.add(h);
 		flox.add(userPanel);
-		Border empty = new EmptyBorder(10, 5, 10 ,5);
+		Border empty = new EmptyBorder(10, 5, 10, 5);
 
 		flox.add(lsitetweetPanel);
 		east.setBorder(empty);
-		east.add(tweet,BorderLayout.NORTH);
-		east.add(flox2,BorderLayout.CENTER);
+		east.add(tweet, BorderLayout.NORTH);
+		east.add(flox2, BorderLayout.CENTER);
 		// poster.add(account);
 
 		this.add(flox, BorderLayout.CENTER);
-	
+
+		// Hashtag
+		JPanel hashtagPanel = new JPanel();
+		hashtagPanel.setBackground(Color.white);
+		hashtagPanel
+				.setBorder(new TitledBorder(new EtchedBorder(), "Hashtag ?"));
+		hashtag = new JTextField();
+		hashtag.setPreferredSize(new Dimension(90, 27));
+		hashtag.setFont(f);
+		hashtag.setBorder(null);
+		hashtag.setEditable(true);
+		hashtagPanel.setMinimumSize(new Dimension(150, 60));
+		hashtagPanel.setMaximumSize(new Dimension(150, 60));
+		hashtagPanel.add(hashtag);
+
+		// User
+		JPanel userSearchePanel = new JPanel();
+		userSearchePanel.setBackground(Color.white);
+		userSearchePanel
+				.setBorder(new TitledBorder(new EtchedBorder(), "User ?"));
+		userSearche = new JTextField();
+		userSearche.setPreferredSize(new Dimension(90, 27));
+		userSearche.setFont(f);
+		userSearche.setBorder(null);
+		userSearche.setEditable(true);
+		userSearchePanel.setMinimumSize(new Dimension(150, 60));
+		userSearchePanel.setMaximumSize(new Dimension(150, 60));
+		userSearchePanel.add(userSearche);
+
 		JPanel w = new JPanel();
+		
+		// botton follow hashtag
+		FollowHashtag fh = new FollowHashtag();
+		
+		// botton follow user
+		FollowUser fu =  new FollowUser();
+
+		flox2.add(hashtagPanel);
+		flox2.add(fh);
+		flox2.add(userSearchePanel);
+		flox2.add(fu);
 		w.setLayout(new BoxLayout(w, BoxLayout.PAGE_AXIS));
 		w.add(poster);
-		JLabel l = new JLabel();
-		l.setText("TODO FILTRE");
-		Dimension d = new Dimension(100,80);
-		l.setPreferredSize(d);
-		w.add(l);
+
+		w.setBackground(Color.white);
+		Dimension d = new Dimension(100, 80);
 		this.add(w, BorderLayout.WEST);
 		this.add(east, BorderLayout.EAST);
 		// this.add(account,BorderLayout.SOUTH);
@@ -144,7 +190,7 @@ public class TwitterView extends JFrame {
 		// this.add(userPanel,BorderLayout.SOUTH);
 
 		this.setTitle("MyTwitter");
-		this.setSize(700, 380);
+		this.setSize(760, 400);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -185,8 +231,10 @@ public class TwitterView extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// fc.DeleteFilm();
-			System.out.println("Tweet");
+			if (!user1.getText().equals("")) {
+				mc.postMessage(user1.getText());
+				System.out.println("Tweet");
+			}
 		}
 	}
 
@@ -205,11 +253,12 @@ public class TwitterView extends JFrame {
 			Font f2 = new Font("ITALIC", Font.BOLD, 18);
 			this.setFont(f2);
 			this.addActionListener(this);
-			//this.setBackground(Color.WHITE);
+			// this.setBackground(Color.WHITE);
 			this.setBorderPainted(false);
 			this.setFont(f);
 			this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		}
+
 		@Override
 		protected void paintComponent(Graphics g) {
 			Graphics2D g2 = (Graphics2D) g.create();
@@ -227,7 +276,44 @@ public class TwitterView extends JFrame {
 			System.out.println("Followers");
 		}
 	}
-	
+
+	@SuppressWarnings("serial")
+	private class Hashtag extends JButton implements ActionListener {
+		private Hashtag() {
+			super();
+			setContentAreaFilled(false);
+			setFocusPainted(false);
+
+			Dimension d = new Dimension(180, 50);
+
+			Font f = new Font("ITALIC", Font.BOLD, 18);
+			this.setPreferredSize(d);
+			this.setText(" Hashtag ");
+			Font f2 = new Font("ITALIC", Font.BOLD, 18);
+			this.setFont(f2);
+			this.addActionListener(this);
+			this.setBorderPainted(false);
+			this.setFont(f);
+			this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		}
+
+		@Override
+		protected void paintComponent(Graphics g) {
+			Graphics2D g2 = (Graphics2D) g.create();
+			g2.setPaint(new GradientPaint(new Point(0, 0), Color.white,
+					new Point(0, getHeight()), Color.WHITE.darker()));
+			g2.fillRect(0, 0, getWidth(), getHeight());
+			g2.dispose();
+
+			super.paintComponent(g);
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			mc.TwitterToHashtagView();
+		}
+	}
+
 	@SuppressWarnings("serial")
 	private class Following extends JButton implements ActionListener {
 		private Following() {
@@ -247,6 +333,7 @@ public class TwitterView extends JFrame {
 			this.setFont(f);
 			this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		}
+
 		@Override
 		protected void paintComponent(Graphics g) {
 			Graphics2D g2 = (Graphics2D) g.create();
@@ -262,5 +349,95 @@ public class TwitterView extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			mc.TwitterToFollowingView();
 		}
+	}
+
+	@SuppressWarnings("serial")
+	private class FollowHashtag extends JButton implements ActionListener {
+		private FollowHashtag() {
+			super();
+			setContentAreaFilled(false);
+			setFocusPainted(false);
+
+			Dimension d = new Dimension(100, 50);
+
+			Font f = new Font("ITALIC", Font.BOLD, 18);
+			this.setPreferredSize(d);
+			this.setText("Follow #");
+			Font f2 = new Font("ITALIC", Font.BOLD, 18);
+			this.setFont(f2);
+			this.addActionListener(this);
+			this.setBorderPainted(false);
+			this.setFont(f);
+			this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		}
+
+		@Override
+		protected void paintComponent(Graphics g) {
+			Graphics2D g2 = (Graphics2D) g.create();
+			g2.setPaint(new GradientPaint(new Point(0, 0), Color.white,
+					new Point(0, getHeight()), Color.WHITE.darker()));
+			g2.fillRect(0, 0, getWidth(), getHeight());
+			g2.dispose();
+
+			super.paintComponent(g);
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			mc.followHashtag(hashtag.getText());
+			System.out.println("follo hashtag");
+		}
+	}
+	
+	@SuppressWarnings("serial")
+	private class FollowUser extends JButton implements ActionListener {
+		private FollowUser() {
+			super();
+			setContentAreaFilled(false);
+			setFocusPainted(false);
+
+			Dimension d = new Dimension(100, 50);
+
+			Font f = new Font("ITALIC", Font.BOLD, 18);
+			this.setPreferredSize(d);
+			this.setText("Follow @");
+			Font f2 = new Font("ITALIC", Font.BOLD, 18);
+			this.setFont(f2);
+			this.addActionListener(this);
+			this.setBorderPainted(false);
+			this.setFont(f);
+			this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		}
+
+		@Override
+		protected void paintComponent(Graphics g) {
+			Graphics2D g2 = (Graphics2D) g.create();
+			g2.setPaint(new GradientPaint(new Point(0, 0), Color.white,
+					new Point(0, getHeight()), Color.WHITE.darker()));
+			g2.fillRect(0, 0, getWidth(), getHeight());
+			g2.dispose();
+
+			super.paintComponent(g);
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			mc.followUser(userSearche.getText());
+			System.out.println("follo user : "+userSearche.getText());
+		}
+	}
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		System.out.println("holaaa");
+		user1.setText("");
+		@SuppressWarnings("unchecked")
+		ArrayList<String> temp = (ArrayList<String>) arg1;
+		String temps2 = "";
+		for (int i = 0; i < temp.size(); i++) {
+			temps2 += temp.get(i) + "\n\n";
+		}
+		listTeewt.setText(temps2);
+		validate();
+
 	}
 }
