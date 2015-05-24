@@ -79,6 +79,12 @@ public class UserClient extends Observable implements MessageListener {
 
 	}
 
+	/**
+	 * Abonne un utilisateur a un topic.
+	 *
+	 * @param name
+	 * @return
+	 */
 	private boolean listenTopic(String name) {
 		System.out.println("On suit un nouveau tag");
 
@@ -101,6 +107,16 @@ public class UserClient extends Observable implements MessageListener {
 		return true;
 	}
 
+	/**
+	 * Le message à envoyer est parsé afin de récuperer la liste des hashtags utilisés
+	 * et la liste des utilistauers mentionnés.
+	 * Si un hashtag n'existe pas, il sera créé si "createHashtag" vaut true.
+	 * Le message sera posté dans les topics associés à chacun des utilisateurs mentionnés (s'ils existent)
+	 * ainsi que dans les topics associès aux hashtags.
+	 *
+	 * @param message le message a envoyer
+	 * @param createHashtags Si l'on crée le hashtag à la volée s'il n'éxiste pas déjà ( non utilisé dans cette version).
+	 */
 	public void postMessage(String message, boolean createHashtags) {
 		String userDestinations[]={};
 		String hashtagDestinations[]={};
@@ -109,23 +125,11 @@ public class UserClient extends Observable implements MessageListener {
 		if (message.contains("#"))
 			hashtagDestinations = message.split("#");
 
-		// probleme d'ajoute
 
-		if (!user.getUsername().equals("")) {
-			messages.add(user.getUsername() + " : " + message);
-		}
 		for (int i = 0; i < userDestinations.length; i++)
 			userDestinations[i] = userDestinations[i].split(" ")[0];
 		for (int i = 0; i < hashtagDestinations.length; i++)
 			hashtagDestinations[i] = hashtagDestinations[i].split(" ")[0];
-
-		System.out.println("OKAY");
-		for (String s : userDestinations)
-			System.out.println(s);
-		for (String s : hashtagDestinations)
-			System.out.println(s);
-
-		System.out.println("OKAY");
 
 		List<String> trueDestinations = new ArrayList<>();
 
@@ -151,15 +155,17 @@ public class UserClient extends Observable implements MessageListener {
 		for (String destination : trueDestinations) {
 			postMessage(message, destination);
 			System.out.println("Posting in : " + destination);
-
 		}
+
+		postMessage(message, user.getUsername());
+		System.out.println("Posting in : " + user.getUsername());
+
 		setChanged();
 		notifyObservers(getMessages());
 	}
 
 	public boolean postMessage(String message, String destinationName) {
 		try {
-			System.out.println("ON VEUT POSTER DANS : "+destinationName);
 			MapMessage newMessage = session.createMapMessage();
 			newMessage.setString("Type", "tweet");
 			newMessage.setString("Author", user.getUsername());
@@ -195,6 +201,13 @@ public class UserClient extends Observable implements MessageListener {
 		return false;
 	}
 
+	/**
+	 * Fonction associant l'utilisateur à un hashtag,
+	 * Cette fonction appelle le server pour créer l'abonnement.
+	 *
+	 * @param hashtag
+	 * @return
+	 */
 	public boolean followHashtag(String hashtag) {
 		try {
 			if (twitter.followHashtag(user.getUsername(), hashtag))
@@ -205,6 +218,13 @@ public class UserClient extends Observable implements MessageListener {
 		return false;
 	}
 
+	/**
+	 * Fonction abonnant un utilisateur à un autre utilistaeur,
+	 * Cette fonction appelle le server pour créer l'abonnement.
+	 *
+	 * @param followedUser
+	 * @return
+	 */
 	public boolean followUser(String followedUser) {
 		System.out.println(user.getUsername() + " wants to follow "
 				+ followedUser);
@@ -217,6 +237,11 @@ public class UserClient extends Observable implements MessageListener {
 		return false;
 	}
 
+	/**
+	 * Fonction appelée à chaque reception de messages.
+	 *
+	 * @param message Le message reçu
+	 */
 	@Override
 	public void onMessage(Message message) {
 		try {

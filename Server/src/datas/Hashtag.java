@@ -7,18 +7,11 @@ import java.io.Serializable;
  */
 public class Hashtag implements Serializable{
     String name;
-//    Destination destination;
 
-    public Hashtag(String name/*, Destination destination*/) {
+    public Hashtag(String name) {
         this.name = name;
-//        this.destination = destination;
-//        System.out.println(destination);
-
     }
 
-//    public Destination getDestination() {
-//        return destination;
-//    }
 
     public String getName() {
         return name;

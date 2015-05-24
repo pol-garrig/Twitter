@@ -1,0 +1,17 @@
+README Projet Twitter   +
+Garrigos Fernando       +
+Veniat Tom   24/05/2015 +
++++++++++++++++++++++++++
+
+En premier lieu il faut lancer activeMQ sur le port 8161
+
+Ensuite on peut lancer le serveur de notre application en exécutant
+	java -jar ServerTwitter.jar
+
+Et enfin lancer autant de client que l’on souhaite avec la commande
+	java -jar ClientTwitter.jar	
+
+Pour la démonstration, deux utilisateurs (“Tom” et “Fer” qui ont tous deux “123” pour mot de passe) et un hashtag (#AppRep) sont déjà présents au lancement de l’application.
+
+L’utilisateur “Fer” suit les tweets envoyés par et mentionnant “Tom” (les tweets contenant “@Tom” et l’utilisateur “Tom” sui le hashtag #AppRep.
+

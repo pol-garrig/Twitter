@@ -47,7 +47,6 @@ public class User implements Serializable {
     }
 
     private boolean isFollowingUser(String user){
-        System.out.println("\tisFollowingUser call answer : "+getUser(user)!=null);
         return getUser(user)!=null;
     }
 
@@ -55,10 +54,9 @@ public class User implements Serializable {
         System.out.println("SEARCHING : "+user);
         for (User u : followedUsers)
             if (u.getUsername().equals(user)){
-                System.out.println("\tgetUser call answer : "+u);
                 return u;
             }
-        System.out.println("\ton a pas trouvé "+user );
+        System.out.println("\t"+user+"not found." );
         return null;
 
     }
@@ -94,7 +92,7 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        String twittos = "Twittoseur : "+username+" who follows :\n";
+        String twittos = "Twittos : "+username+" who follows :\n";
         for (User u : followedUsers)
             twittos+="\t@"+u.getUsername()+"\n";
         for (Hashtag h : followedHashtags)

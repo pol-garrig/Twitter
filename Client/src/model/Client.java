@@ -26,8 +26,9 @@ public class Client extends Observable {
 		try {
 			Registry r = LocateRegistry.getRegistry(host, port);
 			this.twitter = (Twitter) r.lookup("twitter");
-			twitter.newAccount("Fer", "123");
-			twitter.newAccount("Tom", "123");
+
+			this.initDemo();
+
 
 		} catch (RemoteException e) {
 			e.printStackTrace();
@@ -35,73 +36,21 @@ public class Client extends Observable {
 			e.printStackTrace();
 		}
 
-//		this.simulate3();
 	}
 
-	public void simulate1() {
+	private void initDemo() {
 		try {
-			// Account creation and login
-			System.out.println("### SIMUL 1 ###");
-			System.out.println(twitter.connect("Popol", "zizi"));
-			System.out.println(twitter.newAccount("Popol", "zizi"));
-			User u = twitter.connect("Popol", "zizi");
-			System.out.println(u);
-
-			this.user = new UserClient(twitter, u);
-
-			// Hashtags creation tests
-			System.out.println("### HASHTAGS ###");
-			System.out.println(twitter.createHashtag("penis"));
-			System.out.println(twitter.createHashtag("penis"));
-			System.out.println(twitter.createHashtag("peis"));
-
-			user.followHashtag("peis");
-
-			System.out.println("at the end :");
-			System.out.println(twitter.connect("Popol", "zizi"));
-
+			twitter.newAccount("Fer", "123");
+			twitter.newAccount("Tom", "123");
+			twitter.createHashtag("AppRep");
+			twitter.followHashtag("Tom","AppRep");
+			twitter.followUser("Fer","Tom");
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
+
 	}
 
-	public void simulate2() {
-		try {
-			System.out.println("### SIMUL 2 ###");
-			System.out.println(twitter.connect("JEAN", "trucucucul"));
-			System.out.println(twitter.newAccount("JEAN", "trucucucul"));
-			User u = twitter.connect("JEAN", "trucucucul");
-			System.out.println(u);
-
-			this.user = new UserClient(twitter, u);
-
-			System.out.println(user.followUser("Popol"));
-
-			System.out.println(twitter.connect("JEAN", "trucucucul"));
-
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void simulate3() {
-		try {
-			System.out.println("### SIMUL 3 ###");
-			System.out.println(twitter.connect("Princesse", "j<3LesPenis"));
-			System.out.println(twitter.newAccount("Princesse", "j<3LesPenis"));
-			User u = twitter.connect("Princesse", "j<3LesPenis");
-			System.out.println(u);
-
-			this.user = new UserClient(twitter, u);
-
-			user.postMessage("parce que #peis bonjour @Popol", false);
-			user.postMessage("Je tweet @JEAN", false);
-			user.postMessage("parce que #peis dd", false);
-
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}
-	}
 
 	public void connect(String uss, String pssd) throws RemoteException {
 		User u = twitter.connect(uss, pssd);
@@ -125,31 +74,13 @@ public class Client extends Observable {
 		twitter.newAccount(user2, password);
 	}
 
-	// TODO
+
 	public void followHashtag(String text) throws RemoteException {
 		user.followHashtag(text);
-//		ArrayList<String> temp = new ArrayList<>();
-//		for (int i = 0; i < user.getMessages().size(); i++) {
-//			if (user.getMessages().get(i).contains(text)) {
-//				temp.add(user.getMessages().get(i));
-//			}
-//		}
-//
-//		setChanged();
-//		notifyObservers(temp);
 	}
 
-	// TODO
 	public void followUser(String text) throws RemoteException{
-		/*ArrayList<String> temp = new ArrayList<>();
-		System.out.println(user.getMessages().toString());
-		for (int i = 0; i < user.getMessages().size(); i++) {
-			if (user.getMessages().get(i).contains(text)) {
-				temp.add(user.getMessages().get(i));
-			}
-		}*/
+
 		user.followUser(text);
-		//setChanged();
-		//notifyObservers(temp);
 	}
 }

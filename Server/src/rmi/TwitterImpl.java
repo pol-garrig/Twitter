@@ -46,6 +46,7 @@ public class TwitterImpl extends UnicastRemoteObject implements Twitter {
         }
     }
 
+
     @Override
     public boolean newAccount(String username, String password) throws RemoteException {
         if (existsUser(username)) return false;
