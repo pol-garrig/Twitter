@@ -10,6 +10,8 @@ public class Server {
 
 
     public static void main(String[] args) {
+
+
         int port = 1099;
         String host = "localhost";
         if (args.length>0)

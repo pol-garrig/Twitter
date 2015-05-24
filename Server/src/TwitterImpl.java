@@ -1,3 +1,6 @@
+import model.Hashtag;
+import model.User;
+
 import javax.jms.*;
 import javax.naming.Context;
 import javax.naming.InitialContext;

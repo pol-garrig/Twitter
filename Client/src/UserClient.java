@@ -1,3 +1,6 @@
+import model.Hashtag;
+import model.User;
+
 import javax.jms.*;
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -19,6 +22,7 @@ public class UserClient implements MessageListener {
     private User user;
     private List<String> hashtags;
     private List<String> users;
+    private List<String> messages;
 
     public UserClient(Twitter twitter, User user) {
         Hashtable properties = new Hashtable();
@@ -30,6 +34,11 @@ public class UserClient implements MessageListener {
             this.context = new InitialContext(properties);
             javax.jms.ConnectionFactory factory = (ConnectionFactory) context.lookup("ConnectionFactory");
             Connection connection = factory.createConnection();
+
+            //connection.setClientID(user.getUsername());
+            System.out.println("----->" + connection.getClientID());;
+
+
             this.session = connection.createSession(false, javax.jms.Session.AUTO_ACKNOWLEDGE);
             connection.start();
 
@@ -45,8 +54,9 @@ public class UserClient implements MessageListener {
 
             this.user=user;
 
+            this.messages = new ArrayList<>();
 
-            MessageConsumer consumer;
+
             for (Hashtag h : user.getFollowedHashtags()) {
                 listenTopic(h.getName());
             }
@@ -187,6 +197,7 @@ public class UserClient implements MessageListener {
             switch (mmessage.getString("Type")) {
                 case "tweet":
                     System.out.println("New tweet in "+mmessage.getJMSDestination()+" :\n\t"+mmessage.getString("Author")+" -> "+ mmessage.getString("Content"));
+                    this.messages.add(mmessage.getString("Author")+" : "+ mmessage.getString("Content"));
                     break;
                 case "MAJ":
                     String targetName = mmessage.getString("TargetName");

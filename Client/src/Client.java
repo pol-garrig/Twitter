@@ -1,3 +1,5 @@
+import model.User;
+
 import javax.jms.Session;
 import javax.naming.InitialContext;
 import java.rmi.NotBoundException;
@@ -19,6 +21,7 @@ public class Client {
 
 
     public Client(String host, int port) {
+
         try {
             Registry r = LocateRegistry.getRegistry(host, port);
             this.twitter= (Twitter) r.lookup("twitter");
@@ -29,7 +32,7 @@ public class Client {
         }
 
 
-        this.simulate2();
+        this.simulate1();
     }
 
 
