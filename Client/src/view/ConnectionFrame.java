@@ -55,13 +55,15 @@ public class ConnectionFrame extends JFrame {
 
 		JLabel pho = new JLabel();
 
-		try {
-			ImageIcon p = new ImageIcon(ImageIO.read(new File("pl.jpg")));
+		//try {
+			//new ImageIcon(this.getClass().getResource("/images/NotSet_16x16.png"))
+			//ImageIcon p = new ImageIcon(ImageIO.read(new File("./Client/src/pl.jpg")));
+			ImageIcon p = new ImageIcon(this.getClass().getResource("./Client/src/pl.jpg"));
 			pho.setIcon(p);
 			poster.add(pho);
-		} catch (IOException e) {
+		/*} catch (IOException e) {
 			e.printStackTrace();
-		}
+		}*/
 
 		// Password
 		JPanel passwordPanel = new JPanel();

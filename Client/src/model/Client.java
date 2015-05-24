@@ -139,13 +139,15 @@ public class Client extends Observable {
 
 	// TODO
 	public void followUser(String text) throws RemoteException{
-		ArrayList<String> temp = new ArrayList<>();
+		/*ArrayList<String> temp = new ArrayList<>();
+		System.out.println(user.getMessages().toString());
 		for (int i = 0; i < user.getMessages().size(); i++) {
 			if (user.getMessages().get(i).contains(text)) {
 				temp.add(user.getMessages().get(i));
 			}
-		}
-		setChanged();
-		notifyObservers(temp);
+		}*/
+		user.followUser(text);
+		//setChanged();
+		//notifyObservers(temp);
 	}
 }

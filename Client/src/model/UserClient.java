@@ -99,9 +99,9 @@ public class UserClient extends Observable implements MessageListener {
 		String hashtagDestinations[] = message.split("#");
 		// probleme d'ajoute
 		System.out.println("mssd = " + message);
-		if (!user.getUsername().equals("")) {
+		/*if (!user.getUsername().equals("")) {
 			messages.add(user.getUsername() + " : " + message);
-		}
+		}*/
 		for (int i = 0; i < userDestinations.length; i++)
 			userDestinations[i] = userDestinations[i].split(" ")[0];
 		for (int i = 0; i < hashtagDestinations.length; i++)

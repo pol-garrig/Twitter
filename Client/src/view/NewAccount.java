@@ -56,7 +56,7 @@ public class NewAccount extends JFrame {
 		JLabel pho = new JLabel();
 
 		try {
-			ImageIcon p = new ImageIcon(ImageIO.read(new File("pl.jpg")));
+			ImageIcon p = new ImageIcon(ImageIO.read(new File("Client/src/pl.jpg")));
 			pho.setIcon(p);
 			poster.add(pho);
 		} catch (IOException e) {

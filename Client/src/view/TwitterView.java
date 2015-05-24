@@ -74,7 +74,7 @@ public class TwitterView extends JFrame implements Observer {
 		JLabel pho = new JLabel();
 
 		try {
-			ImageIcon p = new ImageIcon(ImageIO.read(new File("pl.jpg")));
+			ImageIcon p = new ImageIcon(ImageIO.read(new File("Client/src/pl.jpg")));
 			pho.setIcon(p);
 			poster.add(pho);
 		} catch (IOException e) {
@@ -423,7 +423,7 @@ public class TwitterView extends JFrame implements Observer {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			mc.followUser(userSearche.getText());
-			System.out.println("follo user : "+userSearche.getText());
+			userSearche.setText("");
 		}
 	}
 	@Override
