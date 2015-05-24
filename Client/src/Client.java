@@ -32,7 +32,7 @@ public class Client {
         }
 
 
-        this.simulate1();
+        this.simulate2();
     }
 
 
